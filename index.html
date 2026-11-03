@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Outfit Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 { color: #333; font-size: 1.5rem; }
+    #outfit-display {
+      margin: 20px 0;
+      font-size: 1.2rem;
+      color: #555;
+      font-weight: bold;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>What to Wear Today?</h1>
+    <div id="outfit-display">Click the button to get today's outfit!</div>
+    <button onclick="pickOutfit()">Pick My Outfit</button>
+  </div>
+
+  <script>
+    const outfits = [
+      "Casual: Blue jeans, a white t-shirt, and sneakers 👕👖",
+      "Smart Casual: Chinos, a button-down shirt, and loafers 👔👞",
+      "Cozy: Sweatpants, an oversized hoodie, and comfy slippers 🧥",
+      "Business: Dress pants, a blazer, and a nice blouse or shirt 🧥✨",
+      "Athleisure: Leggings/joggers, a running top, and trainers 👟"
+    ];
+
+    function pickOutfit() {
+      const randomIndex = Math.floor(Math.random() * outfits.length);
+      document.getElementById("outfit-display").innerText = outfits[randomIndex];
+    }
+  </script>
+
+</body>
+</html>
