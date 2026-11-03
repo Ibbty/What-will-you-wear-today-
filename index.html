@@ -3,180 +3,188 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aesthetic Wardrobe Roulette</title>
+  <title>Aesthetic Wardrobe</title>
   <style>
-    :root {
-      --card-bg: rgba(255, 255, 255, 0.12);
-      --accent: #ffd3b6;
-      --text: #ffffff;
-      --text-muted: rgba(255, 255, 255, 0.6);
-    }
-
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: linear-gradient(-45deg, #1a1c29, #2b1029, #112233, #1f142e);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: var(--text);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      
+      /* Vibrant moving aesthetic background gradient */
+      background: linear-gradient(-45deg, #15102a, #2a1b40, #3d123a, #102a45);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
       overflow: hidden;
     }
 
-    /* Soft moving dreamlike background */
-    @keyframes gradientBG {
+    @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    .card {
-      background: var(--card-bg);
-      padding: 40px 30px;
-      border-radius: 30px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+    /* Minimalist frosted-glass card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 40px;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
       text-align: center;
-      max-width: 380px;
-      width: 85%;
+      width: 320px;
     }
 
-    h1 { 
-      font-size: 1.5rem;
-      font-weight: 400;
-      letter-spacing: 3px;
-      margin-top: 0;
-      margin-bottom: 5px;
+    h1 {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.4rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      margin: 0 0 40px 0;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.95);
     }
 
-    .date-display {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 35px;
-      letter-spacing: 2px;
-    }
-    
-    /* Clean Vertical Outfit Display */
-    .outfit-container {
+    /* Vertical stack layout for items */
+    .wardrobe-stack {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 25px;
-      margin: 40px 0;
+      gap: 30px;
+      margin-bottom: 40px;
     }
 
-    /* Giant Emoji Blocks */
-    .clothing-item {
-      font-size: 4.5rem; /* Huge emojis */
+    /* Giant Emoji Formatting */
+    .emoji-item {
+      font-size: 5.5rem; /* Massive size */
       line-height: 1;
       cursor: pointer;
-      position: relative;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
-      filter: drop-shadow(0 8px 10px rgba(0,0,0,0.15));
       user-select: none;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,0.3));
     }
 
-    .clothing-item:hover {
-      transform: scale(1.15);
+    .emoji-item:hover {
+      transform: scale(1.2);
     }
 
-    /* Locked glow indicator instead of words */
-    .clothing-item.locked {
-      filter: drop-shadow(0 0 12px var(--accent)) drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    /* Glowing sparkle indicator when an item is locked */
+    .emoji-item.locked {
+      filter: drop-shadow(0 0 15px #ffe066) drop-shadow(0 10px 12px rgba(0,0,0,0.4));
     }
-    
-    .clothing-item.locked::after {
+
+    .emoji-item.locked::after {
       content: '✨';
       position: absolute;
-      top: -5px;
-      right: -15px;
-      font-size: 1.2rem;
+      top: -10px;
+      right: -20px;
+      font-size: 1.5rem;
     }
 
+    /* Sleek minimalist button */
     button {
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 14px 35px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 14px 40px;
       border-radius: 50px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 1.5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 2px;
       text-transform: uppercase;
+      cursor: pointer;
       transition: all 0.3s ease;
-      margin-top: 20px;
     }
 
-    button:hover { 
-      background: white;
-      color: #1a1c29;
-      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
-    }
-    
-    button:active { transform: scale(0.97); }
-
-    .hint-text {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 20px;
-      letter-spacing: 0.5px;
+    button:hover {
+      background: #ffffff;
+      color: #15102a;
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
     }
 
-    /* Smooth swap animation */
-    .swap-anim {
-      animation: popEffect 0.3s ease-out;
+    button:active {
+      transform: translateY(0);
     }
 
-    @keyframes popEffect {
-      0% { transform: scale(0.6); opacity: 0.5; }
+    /* Pop animation on shuffle */
+    .pop-animation {
+      animation: pop 0.3s ease-out;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0.4; }
       100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Today's Look</h1>
-    <div class="date-display" id="date-box">---</div>
+  <div class="glass-card">
+    <h1>Outfit</h1>
     
-    <div class="outfit-container">
-      <div id="hat-layer" class="clothing-item" onclick="toggleLock(this)">🧢</div>
-      <div id="top-layer" class="clothing-item" onclick="toggleLock(this)">👕</div>
-      <div id="pants-layer" class="clothing-item" onclick="toggleLock(this)">👖</div>
-      <div id="shoes-layer" class="clothing-item" onclick="toggleLock(this)">👟</div>
+    <div class="wardrobe-stack">
+      <div id="layer-hat" class="emoji-item" onclick="toggleLock(this)">🧢</div>
+      <div id="layer-top" class="emoji-item" onclick="toggleLock(this)">👕</div>
+      <div id="layer-pants" class="emoji-item" onclick="toggleLock(this)">👖</div>
+      <div id="layer-shoes" class="emoji-item" onclick="toggleLock(this)">👟</div>
     </div>
-    
-    <button onclick="rollOutfit()">Randomize</button>
-    <div class="hint-text">Tap any item to lock it with a sparkle</div>
+
+    <button onclick="shuffleWardrobe()">Shuffle</button>
   </div>
 
   <script>
-    // Pools of only emojis
-    const wardrobe = {
-      hats: ["🧢", "🕵️‍♂️", "🤠", "👒", "🎩", "👑", "🪖", "🧣"],
-      tops: ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🥋", "sweater"], // "sweater" handles fallback nicely, but keeping to emoji strings:
-      topsReal: ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🦺", "🍕"], // added playful alternatives
-      pants: ["👖", "🩳", "🦿", "🧦"],
-      shoes: ["👟", "👞", "🥾", "👠", "🩴", "🥿", "⛸️"]
+    const items = {
+      hats: ["🧢", "🤠", "🕵️‍♂️", "🎩", "👑", " beanie ", "👒", "🪖"].map(h => h.trim() === "beanie" ? "🥷" : h), // sanitized strings
+      realHats: ["🧢", "🤠", "🕵️‍♂️", "🎩", "👑", "👒", "🪖", "🧣"],
+      tops: ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🦺", "🥋"],
+      pants: ["👖", "🩳", " leggings ", "🦿"].map(p => p.trim() === "leggings" ? "👖" : p),
+      realPants: ["👖", "🩳", "🧦", "🔧"], // fun alternatives
+      shoes: ["👟", "👞", "🥾", "👠", "🩴", "🥿", "🦿"]
     };
 
-    // Keep actual dynamic emoji pools fully verified
-    const hats = ["🧢", "🤠", "👒", "🎩", "👑", "🪖", "⛑️"];
-    const tops = ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🦺"];
-    const pants = ["👖", "🩳", "🧘‍♀️", "📐"]; // structural fallbacks
-    const pantsFixed = ["👖", "🩳", "👖", "🩳"]; 
-    const shoes = ["👟", "👞", "🥾", "👠", "🩴"];
+    const hatPool = ["🧢", "🤠", "🕵️‍♂️", "🎩", "👑", "👒", "🪖"];
+    const topPool = ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🦺"];
+    const pantPool = ["👖", "🩳", "👖", "🩳", "👖"];
+    const shoePool = ["👟", "👞", "🥾", "👠", "🩴"];
 
     function toggleLock(element) {
       element.classList.toggle('locked');
+    }
+
+    function getRandomEmoji(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function updateLayer(id, pool) {
+      const el = document.getElementById(id);
+      if (el.classList.contains('locked')) return;
+
+      el.classList.remove('pop-animation');
+      void el.offsetWidth; // Reset animation timeline
+      el.classList.add('pop-animation');
+
+      el.innerText = getRandomEmoji(pool);
+    }
+
+    function shuffleWardrobe() {
+      updateLayer("layer-hat", hatPool);
+      updateLayer("layer-top", topPool);
+      updateLayer("layer-pants", pantPool);
+      updateLayer("layer-shoes", shoePool);
+    }
+
+    // Run once on load to give a fresh starting outfit
+    shuffleWardrobe();
+  </script>
+
+</body>
+</html>
+
     }
 
     function getRandomItem(array) {
