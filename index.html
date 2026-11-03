@@ -6,8 +6,8 @@
   <title>Daily Outfit Generator</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,52 +17,130 @@
     .card {
       background: white;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
       text-align: center;
       max-width: 400px;
       width: 100%;
     }
-    h1 { color: #333; font-size: 1.5rem; }
-    #outfit-display {
-      margin: 20px 0;
-      font-size: 1.2rem;
-      color: #555;
-      font-weight: bold;
+    h1 { 
+      color: #222; 
+      font-size: 1.6rem;
+      margin-bottom: 25px;
     }
+    
+    /* Vertical Layout for the Closet/Outfit */
+    .outfit-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 25px 0;
+      min-height: 280px;
+      justify-content: center;
+    }
+
+    /* Individual clothing item styles */
+    .clothing-item {
+      width: 140px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    /* Target specific layers */
+    #top-layer { background-color: #ff6b6b; }
+    #pants-layer { background-color: #4dabf7; }
+    #shoes-layer { background-color: #51cf66; }
+
     button {
-      background-color: #007bff;
+      background-color: #1a73e8;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 12px 28px;
+      border-radius: 25px;
       cursor: pointer;
       font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+      transition: background 0.2s;
     }
-    button:hover { background-color: #0056b3; }
+    button:hover { background-color: #1557b0; }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <h1>What to Wear Today?</h1>
-    <div id="outfit-display">Click the button to get today's outfit!</div>
-    <button onclick="pickOutfit()">Pick My Outfit</button>
+    <h1>Today's Fit</h1>
+    
+    <!-- Stacked Outfit Container -->
+    <div class="outfit-container">
+      <div id="top-layer" class="clothing-item">👕 T-Shirt</div>
+      <div id="pants-layer" class="clothing-item">👖 Pants</div>
+      <div id="shoes-layer" class="clothing-item">👟 Shoes</div>
+    </div>
+    
+    <button onclick="pickOutfit()">Roll a New Fit</button>
   </div>
 
   <script>
-    const outfits = [
-      "Casual: Blue jeans, a white t-shirt, and sneakers 👕👖",
-      "Smart Casual: Chinos, a button-down shirt, and loafers 👔👞",
-      "Cozy: Sweatpants, an oversized hoodie, and comfy slippers 🧥",
-      "Business: Dress pants, a blazer, and a nice blouse or shirt 🧥✨",
-      "Athleisure: Leggings/joggers, a running top, and trainers 👟"
+    // Arrays of different choices for each layer
+    const tops = [
+      { text: "👕 White Tee", color: "#e9ecef", textColor: "#333" },
+      { text: "👕 Red T-Shirt", color: "#ff6b6b", textColor: "#fff" },
+      { text: "👕 Black Tee", color: "#212529", textColor: "#fff" },
+      { text: "👕 Green Tee", color: "#51cf66", textColor: "#fff" }
+    ];
+
+    const pants = [
+      { text: "👖 Blue Jeans", color: "#4dabf7" },
+      { text: "👖 Khakis", color: "#fcc419" },
+      { text: "👖 Black Joggers", color: "#343a40" },
+      { text: "👖 Grey Chinos", color: "#868e96" }
+    ];
+
+    const shoes = [
+      { text: "👟 White Sneakers", color: "#f8f9fa", textColor: "#333" },
+      { text: "👞 Brown Loafers", color: "#d9480f", textColor: "#fff" },
+      { text: "👟 Black Trainers", color: "#212529", textColor: "#fff" },
+      { text: "🥾 Timberlands", color: "#e67e22", textColor: "#fff" }
     ];
 
     function pickOutfit() {
-      const randomIndex = Math.floor(Math.random() * outfits.length);
-      document.getElementById("outfit-display").innerText = outfits[randomIndex];
+      // Pick random items
+      const randomTop = tops[Math.floor(Math.random() * tops.length)];
+      const randomPants = pants[Math.floor(Math.random() * pants.length)];
+      const randomShoes = shoes[Math.floor(Math.random() * shoes.length)];
+
+      // Update Top Layer
+      const topEl = document.getElementById("top-layer");
+      topEl.innerText = randomTop.text;
+      topEl.style.backgroundColor = randomTop.color;
+      topEl.style.color = randomTop.textColor || "#fff";
+
+      // Update Pants Layer
+      const pantsEl = document.getElementById("pants-layer");
+      pantsEl.innerText = randomPants.text;
+      pantsEl.style.backgroundColor = randomPants.color;
+
+      // Update Shoes Layer
+      const shoesEl = document.getElementById("shoes-layer");
+      shoesEl.innerText = randomShoes.text;
+      shoesEl.style.backgroundColor = randomShoes.color;
+      shoesEl.style.color = randomShoes.textColor || "#fff";
     }
+
+    // Run once at startup to set an initial outfit
+    pickOutfit();
+  </script>
+
+</body>
+</html>
+
   </script>
 
 </body>
