@@ -3,139 +3,316 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Outfit Generator</title>
+  <title>Daily Outfit Customizer</title>
   <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f0f2f5;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
+      overflow: hidden;
     }
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      text-align: center;
-      max-width: 400px;
+
+    /* Interactive particle background effect */
+    #bg-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.4;
     }
+
+    .card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 50px rgba(56, 189, 248, 0.1);
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 1;
+    }
+
     h1 { 
-      color: #222; 
-      font-size: 1.6rem;
+      font-size: 1.8rem;
+      margin-top: 0;
+      margin-bottom: 5px;
+      background: linear-gradient(45deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .date-display {
+      font-size: 0.9rem;
+      color: var(--text-muted);
       margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     
-    /* Vertical Layout for the Closet/Outfit */
+    /* Interactive Wardrobe Stack */
     .outfit-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin: 25px 0;
-      min-height: 280px;
-      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+      position: relative;
     }
 
-    /* Individual clothing item styles */
+    /* Cyberpunk style clothing items */
     .clothing-item {
-      width: 140px;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      color: white;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
+      width: 200px;
+      padding: 16px;
+      border-radius: 16px;
+      font-weight: 600;
       font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* Target specific layers */
-    #top-layer { background-color: #ff6b6b; }
-    #pants-layer { background-color: #4dabf7; }
-    #shoes-layer { background-color: #51cf66; }
+    /* Floating / Hover state for clothing pieces */
+    .clothing-item:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Mini hint tag inside the items */
+    .clothing-item::after {
+      content: '🔄 Lock';
+      position: absolute;
+      right: 10px;
+      font-size: 0.6rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+      background: rgba(0,0,0,0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .clothing-item:hover::after { opacity: 0.7; }
+
+    /* Locked state styling */
+    .clothing-item.locked {
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    }
+    .clothing-item.locked::after {
+      content: '🔒 Locked';
+      opacity: 0.9;
+      background: var(--accent);
+      color: #000;
+    }
+
+    /* Actions Panel */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
 
     button {
-      background-color: #1a73e8;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
       color: white;
       border: none;
-      padding: 12px 28px;
-      border-radius: 25px;
+      padding: 14px 40px;
+      border-radius: 50px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
-      transition: background 0.2s;
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+      transition: all 0.3s ease;
+      width: 80%;
     }
-    button:hover { background-color: #1557b0; }
+
+    button:hover { 
+      transform: scale(1.03);
+      box-shadow: 0 6px 25px rgba(56, 189, 248, 0.6);
+    }
+    
+    button:active { transform: scale(0.98); }
+
+    .hint-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Shuffling spin animation */
+    .spin-anim {
+      animation: spinElement 0.4s ease-in-out;
+    }
+
+    @keyframes spinElement {
+      0% { transform: rotateX(0deg); opacity: 0.3; }
+      50% { transform: rotateX(90deg); opacity: 0.5; }
+      100% { transform: rotateX(0deg); opacity: 1; }
+    }
   </style>
 </head>
 <body>
 
+  <canvas id="bg-canvas"></canvas>
+
   <div class="card">
-    <h1>Today's Fit</h1>
+    <h1>WARDROBE ROULETTE</h1>
+    <div class="date-display" id="date-box">Outfit for Today</div>
     
-    <!-- Stacked Outfit Container -->
     <div class="outfit-container">
-      <div id="top-layer" class="clothing-item">👕 T-Shirt</div>
-      <div id="pants-layer" class="clothing-item">👖 Pants</div>
-      <div id="shoes-layer" class="clothing-item">👟 Shoes</div>
+      <!-- Added a Hat layer to complete the visual top-to-bottom hierarchy -->
+      <div id="hat-layer" class="clothing-item" onclick="toggleLock(this)">🧢 Loading...</div>
+      <div id="top-layer" class="clothing-item" onclick="toggleLock(this)">👕 Loading...</div>
+      <div id="pants-layer" class="clothing-item" onclick="toggleLock(this)">👖 Loading...</div>
+      <div id="shoes-layer" class="clothing-item" onclick="toggleLock(this)">👟 Loading...</div>
     </div>
     
-    <button onclick="pickOutfit()">Roll a New Fit</button>
+    <div class="actions">
+      <button onclick="rollOutfit()">Randomize Unlocked</button>
+      <div class="hint-text">💡 Tap an item to lock/unlock it from rolling!</div>
+    </div>
   </div>
 
   <script>
-    // Arrays of different choices for each layer
-    const tops = [
-      { text: "👕 White Tee", color: "#e9ecef", textColor: "#333" },
-      { text: "👕 Red T-Shirt", color: "#ff6b6b", textColor: "#fff" },
-      { text: "👕 Black Tee", color: "#212529", textColor: "#fff" },
-      { text: "👕 Green Tee", color: "#51cf66", textColor: "#fff" }
-    ];
+    // Full Data Engine for dynamic styles
+    const wardrobe = {
+      hats: [
+        { text: "🧢 Baseball Cap", bg: "#475569" },
+        { text: "🕵️‍♂️ Sleek Beanie", bg: "#0f172a" },
+        { text: "🤠 Vintage Fedora", bg: "#78350f" },
+        { text: "☀️ Straw Bucket Hat", bg: "#ca8a04" },
+        { text: "❌ No Hat Day", bg: "transparent" }
+      ],
+      tops: [
+        { text: "👕 Premium White Tee", bg: "#f8fafc", color: "#0f172a" },
+        { text: "👔 Charcoal Button-Up", bg: "#334155" },
+        { text: "🧥 Denim Jacket", bg: "#1d4ed8" },
+        { text: "🎽 Oversized Hoodie", bg: "#6b21a8" },
+        { text: "🏎️ Vintage Racing Jacket", bg: "#b91c1c" }
+      ],
+      pants: [
+        { text: "👖 Classic Blue Jeans", bg: "#2563eb" },
+        { text: "👖 Cargo Pant Khakis", bg: "#b45309" },
+        { text: "👖 Jet Black Joggers", bg: "#1e293b" },
+        { text: "👖 Plaid Pleated Trousers", bg: "#047857" },
+        { text: "🩳 Relaxed Gym Shorts", bg: "#4f46e5" }
+      ],
+      shoes: [
+        { text: "👟 Retro White Sneakers", bg: "#e2e8f0", color: "#0f172a" },
+        { text: "👞 Clean Leather Boots", bg: "#451a03" },
+        { text: "👟 High-top Skate Shoes", bg: "#111827" },
+        { text: "🥾 Chunky All-Terrain Shoes", bg: "#3f6212" },
+        { text: "🩴 Platform Slides", bg: "#be185d" }
+      ]
+    };
 
-    const pants = [
-      { text: "👖 Blue Jeans", color: "#4dabf7" },
-      { text: "👖 Khakis", color: "#fcc419" },
-      { text: "👖 Black Joggers", color: "#343a40" },
-      { text: "👖 Grey Chinos", color: "#868e96" }
-    ];
-
-    const shoes = [
-      { text: "👟 White Sneakers", color: "#f8f9fa", textColor: "#333" },
-      { text: "👞 Brown Loafers", color: "#d9480f", textColor: "#fff" },
-      { text: "👟 Black Trainers", color: "#212529", textColor: "#fff" },
-      { text: "🥾 Timberlands", color: "#e67e22", textColor: "#fff" }
-    ];
-
-    function pickOutfit() {
-      // Pick random items
-      const randomTop = tops[Math.floor(Math.random() * tops.length)];
-      const randomPants = pants[Math.floor(Math.random() * pants.length)];
-      const randomShoes = shoes[Math.floor(Math.random() * shoes.length)];
-
-      // Update Top Layer
-      const topEl = document.getElementById("top-layer");
-      topEl.innerText = randomTop.text;
-      topEl.style.backgroundColor = randomTop.color;
-      topEl.style.color = randomTop.textColor || "#fff";
-
-      // Update Pants Layer
-      const pantsEl = document.getElementById("pants-layer");
-      pantsEl.innerText = randomPants.text;
-      pantsEl.style.backgroundColor = randomPants.color;
-
-      // Update Shoes Layer
-      const shoesEl = document.getElementById("shoes-layer");
-      shoesEl.innerText = randomShoes.text;
-      shoesEl.style.backgroundColor = randomShoes.color;
-      shoesEl.style.color = randomShoes.textColor || "#fff";
+    // Keep track of locked status directly on elements
+    function toggleLock(element) {
+      element.classList.toggle('locked');
     }
 
-    // Run once at startup to set an initial outfit
-    pickOutfit();
+    function getRandomItem(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function applyLayerUpdate(elementId, itemData) {
+      const el = document.getElementById(elementId);
+      
+      // If the user locked this block, skip updating it
+      if (el.classList.contains('locked')) return;
+
+      // Add a quick visual spin trigger
+      el.classList.remove('spin-anim');
+      void el.offsetWidth; // Trigger reflow to restart animation
+      el.classList.add('spin-anim');
+
+      // Update text and stylistic color properties
+      el.innerText = itemData.text;
+      el.style.backgroundColor = itemData.bg;
+      el.style.color = itemData.color || "#f8fafc";
+      
+      // Handle the invisible/transparent hat option nicely
+      if(itemData.bg === "transparent") {
+        el.style.border = "1px dashed rgba(255,255,255,0.2)";
+      } else {
+        el.style.border = "1px solid rgba(255,255,255,0.1)";
+      }
+    }
+
+    function rollOutfit() {
+      applyLayerUpdate("hat-layer", getRandomItem(wardrobe.hats));
+      applyLayerUpdate("top-layer", getRandomItem(wardrobe.tops));
+      applyLayerUpdate("pants-layer", getRandomItem(wardrobe.pants));
+      applyLayerUpdate("shoes-layer", getRandomItem(wardrobe.shoes));
+    }
+
+    // Set Up Date display automatically
+    const options = { weekday: 'long', month: 'short', day: 'numeric' };
+    document.getElementById("date-box").innerText = new Date().toLocaleDateString('en-US', options);
+
+    // Initial Roll on Load
+    rollOutfit();
+
+    // Subtle Animated Canvas Background logic for premium feeling
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let points = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for(let i=0; i<40; i++) {
+      points.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        dx: (Math.random() - 0.5) * 0.5,
+        dy: (Math.random() - 0.5) * 0.5
+      });
+    }
+
+    function animateBg() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#38bdf8';
+      points.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      });
+      requestAnimationFrame(animateBg);
+    }
+    animateBg();
   </script>
 
 </body>
