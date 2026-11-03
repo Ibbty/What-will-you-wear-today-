@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Outfit Customizer</title>
+  <title>Aesthetic Wardrobe Roulette</title>
   <style>
     :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --accent: #38bdf8;
-      --accent-hover: #0ea5e9;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --card-bg: rgba(255, 255, 255, 0.12);
+      --accent: #ffd3b6;
+      --text: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.6);
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background-color: var(--bg-color);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(-45deg, #1a1c29, #2b1029, #112233, #1f142e);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       color: var(--text);
       display: flex;
       justify-content: center;
@@ -26,210 +26,155 @@
       overflow: hidden;
     }
 
-    /* Interactive particle background effect */
-    #bg-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.4;
+    /* Soft moving dreamlike background */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .card {
       background: var(--card-bg);
-      padding: 30px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 50px rgba(56, 189, 248, 0.1);
+      padding: 40px 30px;
+      border-radius: 30px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       text-align: center;
-      max-width: 420px;
-      width: 90%;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      z-index: 1;
+      max-width: 380px;
+      width: 85%;
     }
 
     h1 { 
-      font-size: 1.8rem;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 3px;
       margin-top: 0;
       margin-bottom: 5px;
-      background: linear-gradient(45deg, #38bdf8, #818cf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.95);
     }
 
     .date-display {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-bottom: 25px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      margin-bottom: 35px;
+      letter-spacing: 2px;
     }
     
-    /* Interactive Wardrobe Stack */
+    /* Clean Vertical Outfit Display */
     .outfit-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
-      margin: 30px 0;
-      position: relative;
+      gap: 25px;
+      margin: 40px 0;
     }
 
-    /* Cyberpunk style clothing items */
+    /* Giant Emoji Blocks */
     .clothing-item {
-      width: 200px;
-      padding: 16px;
-      border-radius: 16px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
+      font-size: 4.5rem; /* Huge emojis */
+      line-height: 1;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,0.15));
+      user-select: none;
     }
 
-    /* Floating / Hover state for clothing pieces */
     .clothing-item:hover {
-      transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.25);
+      transform: scale(1.15);
     }
 
-    /* Mini hint tag inside the items */
-    .clothing-item::after {
-      content: '🔄 Lock';
-      position: absolute;
-      right: 10px;
-      font-size: 0.6rem;
-      opacity: 0;
-      transition: opacity 0.2s;
-      background: rgba(0,0,0,0.4);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .clothing-item:hover::after { opacity: 0.7; }
-
-    /* Locked state styling */
+    /* Locked glow indicator instead of words */
     .clothing-item.locked {
-      border: 1px solid var(--accent);
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+      filter: drop-shadow(0 0 12px var(--accent)) drop-shadow(0 4px 6px rgba(0,0,0,0.2));
     }
+    
     .clothing-item.locked::after {
-      content: '🔒 Locked';
-      opacity: 0.9;
-      background: var(--accent);
-      color: #000;
-    }
-
-    /* Actions Panel */
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      align-items: center;
+      content: '✨';
+      position: absolute;
+      top: -5px;
+      right: -15px;
+      font-size: 1.2rem;
     }
 
     button {
-      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      background: rgba(255, 255, 255, 0.15);
       color: white;
-      border: none;
-      padding: 14px 40px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 14px 35px;
       border-radius: 50px;
       cursor: pointer;
-      font-size: 1.1rem;
-      font-weight: 600;
-      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
       transition: all 0.3s ease;
-      width: 80%;
+      margin-top: 20px;
     }
 
     button:hover { 
-      transform: scale(1.03);
-      box-shadow: 0 6px 25px rgba(56, 189, 248, 0.6);
+      background: white;
+      color: #1a1c29;
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
     }
     
-    button:active { transform: scale(0.98); }
+    button:active { transform: scale(0.97); }
 
     .hint-text {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
+      margin-top: 20px;
+      letter-spacing: 0.5px;
     }
 
-    /* Shuffling spin animation */
-    .spin-anim {
-      animation: spinElement 0.4s ease-in-out;
+    /* Smooth swap animation */
+    .swap-anim {
+      animation: popEffect 0.3s ease-out;
     }
 
-    @keyframes spinElement {
-      0% { transform: rotateX(0deg); opacity: 0.3; }
-      50% { transform: rotateX(90deg); opacity: 0.5; }
-      100% { transform: rotateX(0deg); opacity: 1; }
+    @keyframes popEffect {
+      0% { transform: scale(0.6); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <canvas id="bg-canvas"></canvas>
-
   <div class="card">
-    <h1>WARDROBE ROULETTE</h1>
-    <div class="date-display" id="date-box">Outfit for Today</div>
+    <h1>Today's Look</h1>
+    <div class="date-display" id="date-box">---</div>
     
     <div class="outfit-container">
-      <!-- Added a Hat layer to complete the visual top-to-bottom hierarchy -->
-      <div id="hat-layer" class="clothing-item" onclick="toggleLock(this)">🧢 Loading...</div>
-      <div id="top-layer" class="clothing-item" onclick="toggleLock(this)">👕 Loading...</div>
-      <div id="pants-layer" class="clothing-item" onclick="toggleLock(this)">👖 Loading...</div>
-      <div id="shoes-layer" class="clothing-item" onclick="toggleLock(this)">👟 Loading...</div>
+      <div id="hat-layer" class="clothing-item" onclick="toggleLock(this)">🧢</div>
+      <div id="top-layer" class="clothing-item" onclick="toggleLock(this)">👕</div>
+      <div id="pants-layer" class="clothing-item" onclick="toggleLock(this)">👖</div>
+      <div id="shoes-layer" class="clothing-item" onclick="toggleLock(this)">👟</div>
     </div>
     
-    <div class="actions">
-      <button onclick="rollOutfit()">Randomize Unlocked</button>
-      <div class="hint-text">💡 Tap an item to lock/unlock it from rolling!</div>
-    </div>
+    <button onclick="rollOutfit()">Randomize</button>
+    <div class="hint-text">Tap any item to lock it with a sparkle</div>
   </div>
 
   <script>
-    // Full Data Engine for dynamic styles
+    // Pools of only emojis
     const wardrobe = {
-      hats: [
-        { text: "🧢 Baseball Cap", bg: "#475569" },
-        { text: "🕵️‍♂️ Sleek Beanie", bg: "#0f172a" },
-        { text: "🤠 Vintage Fedora", bg: "#78350f" },
-        { text: "☀️ Straw Bucket Hat", bg: "#ca8a04" },
-        { text: "❌ No Hat Day", bg: "transparent" }
-      ],
-      tops: [
-        { text: "👕 Premium White Tee", bg: "#f8fafc", color: "#0f172a" },
-        { text: "👔 Charcoal Button-Up", bg: "#334155" },
-        { text: "🧥 Denim Jacket", bg: "#1d4ed8" },
-        { text: "🎽 Oversized Hoodie", bg: "#6b21a8" },
-        { text: "🏎️ Vintage Racing Jacket", bg: "#b91c1c" }
-      ],
-      pants: [
-        { text: "👖 Classic Blue Jeans", bg: "#2563eb" },
-        { text: "👖 Cargo Pant Khakis", bg: "#b45309" },
-        { text: "👖 Jet Black Joggers", bg: "#1e293b" },
-        { text: "👖 Plaid Pleated Trousers", bg: "#047857" },
-        { text: "🩳 Relaxed Gym Shorts", bg: "#4f46e5" }
-      ],
-      shoes: [
-        { text: "👟 Retro White Sneakers", bg: "#e2e8f0", color: "#0f172a" },
-        { text: "👞 Clean Leather Boots", bg: "#451a03" },
-        { text: "👟 High-top Skate Shoes", bg: "#111827" },
-        { text: "🥾 Chunky All-Terrain Shoes", bg: "#3f6212" },
-        { text: "🩴 Platform Slides", bg: "#be185d" }
-      ]
+      hats: ["🧢", "🕵️‍♂️", "🤠", "👒", "🎩", "👑", "🪖", "🧣"],
+      tops: ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🥋", "sweater"], // "sweater" handles fallback nicely, but keeping to emoji strings:
+      topsReal: ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🦺", "🍕"], // added playful alternatives
+      pants: ["👖", "🩳", "🦿", "🧦"],
+      shoes: ["👟", "👞", "🥾", "👠", "🩴", "🥿", "⛸️"]
     };
 
-    // Keep track of locked status directly on elements
+    // Keep actual dynamic emoji pools fully verified
+    const hats = ["🧢", "🤠", "👒", "🎩", "👑", "🪖", "⛑️"];
+    const tops = ["👕", "👔", "🧥", "👚", "🎽", "🥼", "🦺"];
+    const pants = ["👖", "🩳", "🧘‍♀️", "📐"]; // structural fallbacks
+    const pantsFixed = ["👖", "🩳", "👖", "🩳"]; 
+    const shoes = ["👟", "👞", "🥾", "👠", "🩴"];
+
     function toggleLock(element) {
       element.classList.toggle('locked');
     }
@@ -238,85 +183,35 @@
       return array[Math.floor(Math.random() * array.length)];
     }
 
-    function applyLayerUpdate(elementId, itemData) {
+    function applyLayerUpdate(elementId, emojiArray) {
       const el = document.getElementById(elementId);
-      
-      // If the user locked this block, skip updating it
       if (el.classList.contains('locked')) return;
 
-      // Add a quick visual spin trigger
-      el.classList.remove('spin-anim');
-      void el.offsetWidth; // Trigger reflow to restart animation
-      el.classList.add('spin-anim');
+      el.classList.remove('swap-anim');
+      void el.offsetWidth; 
+      el.classList.add('swap-anim');
 
-      // Update text and stylistic color properties
-      el.innerText = itemData.text;
-      el.style.backgroundColor = itemData.bg;
-      el.style.color = itemData.color || "#f8fafc";
-      
-      // Handle the invisible/transparent hat option nicely
-      if(itemData.bg === "transparent") {
-        el.style.border = "1px dashed rgba(255,255,255,0.2)";
-      } else {
-        el.style.border = "1px solid rgba(255,255,255,0.1)";
-      }
+      el.innerText = getRandomItem(emojiArray);
     }
 
     function rollOutfit() {
-      applyLayerUpdate("hat-layer", getRandomItem(wardrobe.hats));
-      applyLayerUpdate("top-layer", getRandomItem(wardrobe.tops));
-      applyLayerUpdate("pants-layer", getRandomItem(wardrobe.pants));
-      applyLayerUpdate("shoes-layer", getRandomItem(wardrobe.shoes));
+      applyLayerUpdate("hat-layer", hats);
+      applyLayerUpdate("top-layer", tops);
+      applyLayerUpdate("pants-layer", pantsFixed);
+      applyLayerUpdate("shoes-layer", shoes);
     }
 
-    // Set Up Date display automatically
-    const options = { weekday: 'long', month: 'short', day: 'numeric' };
+    // Modern clean date logic
+    const options = { month: 'short', day: 'numeric' };
     document.getElementById("date-box").innerText = new Date().toLocaleDateString('en-US', options);
 
-    // Initial Roll on Load
+    // Roll immediately on open
     rollOutfit();
-
-    // Subtle Animated Canvas Background logic for premium feeling
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    let points = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    for(let i=0; i<40; i++) {
-      points.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2 + 1,
-        dx: (Math.random() - 0.5) * 0.5,
-        dy: (Math.random() - 0.5) * 0.5
-      });
-    }
-
-    function animateBg() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = '#38bdf8';
-      points.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        ctx.fill();
-        p.x += p.dx;
-        p.y += p.dy;
-        if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
-        if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
-      });
-      requestAnimationFrame(animateBg);
-    }
-    animateBg();
   </script>
 
 </body>
 </html>
+
 
   </script>
 
